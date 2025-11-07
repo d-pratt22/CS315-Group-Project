@@ -12,6 +12,7 @@ public class SortingManager : MonoBehaviour
     private CubeManager cubeManager;
     private BubbleSort bubbleSort;
     private InsertionSort insertionSort;
+    private QuickSort quickSort;
 
     private void Awake()
     {
@@ -20,6 +21,8 @@ public class SortingManager : MonoBehaviour
         bubbleSort = GetComponent<BubbleSort>();
 
         insertionSort = GetComponent <InsertionSort>();
+
+        quickSort = GetComponent <QuickSort>();
     }
 
     private void Start()
@@ -38,7 +41,7 @@ public class SortingManager : MonoBehaviour
                 StartCoroutine(insertionSort.SortCubes(cubeManager.Cubes));
                 break;
             case 2:
-                //put in sorting algorithm
+                StartCoroutine(quickSort.SortCubes(cubeManager.Cubes));
                 break;
             case 3:
                 //put in sorting algorithm
