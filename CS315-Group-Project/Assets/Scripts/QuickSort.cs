@@ -5,43 +5,40 @@ public class QuickSort : MonoBehaviour, ISorting
 {
     public IEnumerator SortCubes(GameObject[] cubes)
     {
-        quickSort(cubes, 1, cubes.Length - 1);
-        yield return new WaitForSeconds(0.1f);
-
+        yield return StartCoroutine(QuickSortCoroutine(cubes, 0, cubes.Length - 1));
     }
 
-    private void quickSort(GameObject[] cubes, int low, int high)
+    private IEnumerator QuickSortCoroutine(GameObject[] cubes, int low, int high)
     {
-        // check to see if the selection is already sorted
-        if(cubes[low].transform.localScale.y >= cubes[high].transform.localScale.y)
-        {
-            return;
-        }
+        if (low >= high)
+            yield break;
+
+        int pivotIndex = high;
+        float pivotValue = cubes[pivotIndex].transform.localScale.y;
 
         int left = low;
-        int right = high;
+        int right = high - 1;
 
-        int pivot = high;
-        
-        while (left != right)
+        while (left <= right)
         {
-            while (cubes[left].transform.localScale.y <= cubes[pivot].transform.localScale.y && left < right)
-            {
+            while (left <= right && cubes[left].transform.localScale.y < pivotValue)
                 left++;
-            }
 
-            while (cubes[right].transform.localScale.y >= cubes[pivot].transform.localScale.y && left < right)
-            {
+            while (left <= right && cubes[right].transform.localScale.y >= pivotValue)
                 right--;
-            }
 
-            swap(cubes, left, right);
+            if (left < right)
+            {
+                swap(cubes, left, right);
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
-        swap(cubes, left, pivot);
-        quickSort(cubes, low, left - 1);
-        quickSort(cubes, right + 1, high);
+        swap(cubes, left, pivotIndex);
+        yield return new WaitForSeconds(0.1f);
 
+        yield return StartCoroutine(QuickSortCoroutine(cubes, low, left - 1));
+        yield return StartCoroutine(QuickSortCoroutine(cubes, left + 1, high));
     }
 
     private void swap(GameObject[] cubes, int a, int b)
@@ -49,5 +46,9 @@ public class QuickSort : MonoBehaviour, ISorting
         GameObject temp = cubes[a];
         cubes[a] = cubes[b];
         cubes[b] = temp;
+
+        Vector3 tempPos = cubes[a].transform.position;
+        cubes[a].transform.position = cubes[b].transform.position;
+        cubes[b].transform.position = tempPos;
     }
 }
