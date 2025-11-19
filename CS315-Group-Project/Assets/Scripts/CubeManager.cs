@@ -64,6 +64,9 @@ public class CubeManager : MonoBehaviour
         }
 
         RandomizeHeights();
+
+
+        FindAnyObjectByType<CameraTracking>()?.UpdateCameraTarget();
     }
 
     public void RandomizeHeights()
